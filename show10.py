@@ -4,10 +4,11 @@ import sys
 import os
 import statistics as st
 from scipy import signal
+import re
 
-path_folder = r"C:\Users\Nik\Desktop\Projects\programa\data"
-path_folder = path_folder.replace(chr(92), "/")
-path_folder += "/set1/"
+path_folder = r"C:\Users\Nik\Desktop\Projects\programa\data2\13"
+path_folder = path_folder.replace(chr(92), "/") + "/"
+
 size = 1  # кол-во графиков
 s = 0  # начальный файл
 # 153 884    измеряемый диапазон. 0-2136 диапазон данных
@@ -36,9 +37,11 @@ def car(path_folder, file_list, s):
     for i in range(s, s + size):
         print(s)
         spec = open(str(path_folder + file_list[i]), "r", encoding="utf8")
-        spec = spec.read().split(",")
+        spec = spec.read()
+        spec = re.split("\n|\t", spec)
+
         for j in range(start_point, end_point):
-            y[j - start_point] = float(spec[j + 11])
+            y[j - start_point] = float(spec[j + 15].replace(",", "."))
         # z = exponential_smoothing(y,alpha)
         z = signal.savgol_filter(y, 51, 3)
         plt.plot(x, y, label=file_list[i], color="royalblue", linewidth=1)

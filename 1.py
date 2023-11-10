@@ -74,3 +74,9 @@ while stat == True:
     if a == "3":
         plt.close()
         break
+
+
+
+
+Elapsed time:  3.169907808303833
+3.1751585006713867

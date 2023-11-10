@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from scipy import signal
 
 mas = np.ones((1, 5))
 print(mas)
@@ -14,8 +15,15 @@ print(np.sum(mas, axis=0))
 print(chr(92))
 
 
-path_folder = r"C:\Users\Nik\Desktop\Projects\programa\data2"
-path_folder = path_folder.replace(chr(92), "/")
-print(path_folder)
-file_list = np.array(os.listdir(path_folder))
-print(file_list)
+main_folder = r"C:\Users\Nik\Desktop\Projects\programa\data"
+main_folder = main_folder.replace(chr(92), "/")
+print(main_folder)
+folders_list = np.array(os.listdir(main_folder))
+print(folders_list)
+
+for a in range(len(folders_list)):
+    current_folder = main_folder + "/" + folders_list[a] + "/"
+    print(current_folder)
+    file_list = np.array(os.listdir(current_folder))
+    print(file_list[a][-1])
+    print(current_folder + file_list[a])
