@@ -4,24 +4,27 @@ import sys
 import os
 import statistics as st
 from scipy import signal
-path_folder = "C:/Users/Nik/Desktop/prog/set1/"
-size = 1    #кол-во графиков
-s=0         #начальный файл
-#153 884    измеряемый диапазон. 0-2136 диапазон данных
-start=400   #нм
-end=700     #нм
-step = (884-153)/2134
 
-start_point=round((start-153)/step)
-end_point=start_point+int((end-start)/step)
+path_folder = r"C:\Users\Nik\Desktop\Projects\programa\data"
+path_folder = path_folder.replace(chr(92), "/")
+path_folder += "/set1/"
+size = 1  # кол-во графиков
+s = 0  # начальный файл
+# 153 884    измеряемый диапазон. 0-2136 диапазон данных
+start = 400  # нм
+end = 700  # нм
+step = (884 - 153) / 2134
+
+start_point = round((start - 153) / step)
+end_point = start_point + int((end - start) / step)
 
 print(step, start_point, end_point)
 
-file_list =np.array( os.listdir(path_folder))
-n=len(file_list)
+file_list = np.array(os.listdir(path_folder))
+n = len(file_list)
 print(n)
-y= np.zeros(int((end-start)/step))
-x=np.arange(start+step, end,step)
+y = np.zeros(int((end - start) / step))
+x = np.arange(start + step, end, step)
 
 alpha = 0.2
 
@@ -29,58 +32,63 @@ alpha = 0.2
 fig, ax = plt.subplots(figsize=[10, 10])
 
 
-def car(path_folder,file_list,s):
-    for i in range(s,s+size):
+def car(path_folder, file_list, s):
+    for i in range(s, s + size):
         print(s)
-        spec= open(str(path_folder+file_list[i]), "r", encoding="utf8")
+        spec = open(str(path_folder + file_list[i]), "r", encoding="utf8")
         spec = spec.read().split(",")
-        for j in range(start_point,end_point):
-            y[j-start_point]=float(spec[j+11])
-        #z = exponential_smoothing(y,alpha)
-        z= signal.savgol_filter(y,51,3)
-        plt.plot(x,y, label=file_list[i],color="royalblue",linewidth=1)
-        plt.plot(x,z, label="s "+file_list[i],color="darkorange",linewidth=1)
-        mean= np.mean(z[len(z)-150:len(z)])
-        plt.plot(x,z-mean, label="d "+file_list[i],color="green",linewidth=1)
+        for j in range(start_point, end_point):
+            y[j - start_point] = float(spec[j + 11])
+        # z = exponential_smoothing(y,alpha)
+        z = signal.savgol_filter(y, 51, 3)
+        plt.plot(x, y, label=file_list[i], color="royalblue", linewidth=1)
+        plt.plot(x, z, label="s " + file_list[i], color="darkorange", linewidth=1)
+        mean = np.mean(z[len(z) - 150 : len(z)])
+        plt.plot(x, z - mean, label="d " + file_list[i], color="green", linewidth=1)
 
         print(mean)
 
-    plt.legend(loc=1, title=round(alpha,4))
+    plt.legend(loc=1, title=round(alpha, 4))
     plt.show()
-    
+
 
 def exponential_smoothing(series, alpha):
-    result = [series[0]] # first value is same as series
+    result = [series[0]]  # first value is same as series
     for n in range(1, len(series)):
-        result.append(alpha * series[n] + (1 - alpha) * result[n-1])
+        result.append(alpha * series[n] + (1 - alpha) * result[n - 1])
     return result
 
+
 def on_press(event):
-    print('press', event.key)
+    print("press", event.key)
     sys.stdout.flush()
-    global s 
+    global s
     global size
     global alpha
     plt.clf()
     plt.cla()
-    if event.key == 'right':
-        s = s+size
-        if s>n-size: s=n-size
-    if event.key == 'left':
-        s = s-size
-        if s>n-size: s=0
-    if event.key == 'up':
-        size+=1
-    if event.key == 'down':
-        size-=1
-        if size==0: size=1
-    if event.key == '1':
-        alpha+=0.002
+    if event.key == "right":
+        s = s + size
+        if s > n - size:
+            s = n - size
+    if event.key == "left":
+        s = s - size
+        if s > n - size:
+            s = 0
+    if event.key == "up":
+        size += 1
+    if event.key == "down":
+        size -= 1
+        if size == 0:
+            size = 1
+    if event.key == "1":
+        alpha += 0.002
         print(alpha)
-    if event.key == '2':
-        alpha-=0.002
+    if event.key == "2":
+        alpha -= 0.002
         print(alpha)
-    car(path_folder,file_list,s)
+    car(path_folder, file_list, s)
 
-fig.canvas.mpl_connect('key_press_event', on_press)
+
+fig.canvas.mpl_connect("key_press_event", on_press)
 plt.show()
