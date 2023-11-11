@@ -12,8 +12,8 @@ path_folder = path_folder.replace(chr(92), "/") + "/"
 size = 1  # кол-во графиков
 s = 0  # начальный файл
 # 153 884    измеряемый диапазон. 0-2136 диапазон данных
-start = 400  # нм
-end = 700  # нм
+start = 450  # нм
+end = 650  # нм
 step = (884 - 153) / 2134
 
 start_point = round((start - 153) / step)
@@ -50,8 +50,6 @@ def car(path_folder, s):
         plt.plot(x, z, label="s " + file_list[i], color="darkorange", linewidth=1)
         mean = np.mean(z[len(z) - 150 : len(z)])
         plt.plot(x, z - mean, label="d " + file_list[i], color="green", linewidth=1)
-
-        print(mean)
 
     plt.legend(loc=1, title=round(alpha, 4))
     plt.show()
