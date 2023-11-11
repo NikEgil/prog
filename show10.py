@@ -6,7 +6,7 @@ import statistics as st
 from scipy import signal
 import re
 
-path_folder = r"C:\Users\Nik\Desktop\Projects\programa\data2\13"
+path_folder = r"C:\Users\Nik\Desktop\prog\data3\14"
 path_folder = path_folder.replace(chr(92), "/") + "/"
 
 size = 1  # кол-во графиков
@@ -21,27 +21,29 @@ end_point = start_point + int((end - start) / step)
 
 print(step, start_point, end_point)
 
-file_list = np.array(os.listdir(path_folder))
-n = len(file_list)
-print(n)
+
 y = np.zeros(int((end - start) / step))
 x = np.arange(start + step, end, step)
 
 alpha = 0.2
-
+n = 0
 
 fig, ax = plt.subplots(figsize=[10, 10])
 
 
-def car(path_folder, file_list, s):
+def car(path_folder, s):
+    global n
     for i in range(s, s + size):
         print(s)
+        file_list = np.array(os.listdir(path_folder))
+        n = len(file_list)
         spec = open(str(path_folder + file_list[i]), "r", encoding="utf8")
         spec = spec.read()
         spec = re.split("\n|\t", spec)
-
+        for k in range(20):
+            print(k, spec[k])
         for j in range(start_point, end_point):
-            y[j - start_point] = float(spec[j + 15].replace(",", "."))
+            y[j - start_point] = spec[j * 2 + 15].replace(",", ".")
         # z = exponential_smoothing(y,alpha)
         z = signal.savgol_filter(y, 51, 3)
         plt.plot(x, y, label=file_list[i], color="royalblue", linewidth=1)
@@ -90,7 +92,7 @@ def on_press(event):
     if event.key == "2":
         alpha -= 0.002
         print(alpha)
-    car(path_folder, file_list, s)
+    car(path_folder, s)
 
 
 fig.canvas.mpl_connect("key_press_event", on_press)
