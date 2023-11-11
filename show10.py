@@ -19,9 +19,6 @@ step = (884 - 153) / 2134
 start_point = round((start - 153) / step)
 end_point = start_point + int((end - start) / step)
 
-print(step, start_point, end_point)
-
-
 y = np.zeros(int((end - start) / step))
 x = np.arange(start + step, end, step)
 
