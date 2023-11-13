@@ -50,3 +50,26 @@ for a in range(len(folders_list)):
     for file in range(len(file_list)):
         for j in range(start_point, end_point):
             y[j - start_point] = float(spec[j + 11])
+
+
+if len(mas) > 1:
+    a = len(mas) - 1
+
+    mas = np.sum(mas, axis=0)
+    mas = np.divide(mas, a)
+    mas = signal.savgol_filter(mas, 60, 3)
+    ax.plot(
+        x,
+        mas,
+        linewidth=1.5,
+        label=current_folder,
+        alpha=1,
+        color=color_list[len(ax.get_lines())],
+    )
+    ax.legend(bbox_to_anchor=(1.01, 1), loc="upper left", borderaxespad=0.0)
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+    print("used graphs " + str(a))
+else:
+    print("no graphs")
+    pass

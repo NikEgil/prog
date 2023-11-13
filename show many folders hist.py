@@ -31,6 +31,8 @@ end_mean_point = int(len_y * 0.9)
 y = np.zeros(len_y)
 x = np.arange(start + step, end, step)
 # endregion
+start_max_point = round(len_y * 0.27)
+print(start_point, start_max_point)
 
 
 def get_rmr(spec):
@@ -57,58 +59,26 @@ color_list = [matplotlib.colors.rgb2hex(cmap(i)[:3]) for i in range(cmap.N)]
 
 start_time = time.time()
 
-
+bins = [1, 2, 3, 4, 5]
+# len(folders_list)
+bins1 = np.arange(0, 0.2, 0.01025)
 for folder in range(len(folders_list)):
     current_folder_path = main_folder + "/" + folders_list[folder] + "/"
     current_folder = folders_list[folder]
     file_list = np.array(os.listdir(current_folder_path))
 
     print("in " + current_folder + " graphs ", len(file_list))
-    mas = np.zeros((1, len(x)))
-
-    if file_list[0][-1] == "n":
-        for file in range(len(file_list)):
-            spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
-            y = get_rmr(spec.read())
-
-            y = y - np.mean(y[start_mean_point:end_mean_point])
-            if np.max(y) > crit:
-                mas = np.append(mas, [y], axis=0)
-
-    elif file_list[0][-1] == "t":
-        continue
-        for file in range(len(file_list)):
-            spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
-            y = get_txt(spec.read())
-
-            y = y - np.mean(y[start_mean_point:end_mean_point])
-            if np.max(y) > crit:
-                mas = np.append(mas, [y], axis=0)
-    else:
-        print("no graphs in folder")
-        continue
-
-    if len(mas) > 1:
-        a = len(mas) - 1
-
-        mas = np.sum(mas, axis=0)
-        mas = np.divide(mas, a)
-        mas = signal.savgol_filter(mas, 60, 3)
-        ax.plot(
-            x,
-            mas,
-            linewidth=1.5,
-            label=current_folder,
-            alpha=1,
-            color=color_list[len(ax.get_lines())],
+    mas = np.zeros(0)
+    for file in range(len(file_list)):
+        spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
+        y = get_rmr(spec.read())
+        a = np.mean(y[start_max_point : start_max_point + 50]) - np.mean(
+            y[start_mean_point:end_mean_point]
         )
-        ax.legend(bbox_to_anchor=(1.01, 1), loc="upper left", borderaxespad=0.0)
-        fig.canvas.draw()
-        fig.canvas.flush_events()
-        print("used graphs " + str(a))
-    else:
-        print("no graphs")
-        pass
+
+        mas = np.append(mas, a)
+    plt.hist(mas, bins=bins1, fill=False, histtype="step")
+
 
 print("Elapsed time: ", time.time() - start_time)
 

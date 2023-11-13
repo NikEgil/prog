@@ -8,7 +8,7 @@ import re
 from pylab import *
 
 
-main_folder = r"C:\Users\Nik\Desktop\prog\data2"
+main_folder = r"C:\Users\Nik\Desktop\prog\только rmr"
 main_folder = main_folder.replace(chr(92), "/")
 print(main_folder)
 folders_list = np.array(os.listdir(main_folder), dtype=int)
@@ -90,7 +90,7 @@ for folder in range(len(folders_list)):
     file_list = np.array(os.listdir(current_folder_path))
     print("graphs ", len(file_list))
 
-    crit = 0.1
+    crit = 0.0
     color_step = 1 / len(folders_list)
     q = 0
     t = folders_list[folder]

@@ -6,7 +6,7 @@ import statistics as st
 from scipy import signal
 import re
 
-path_folder = r"C:\Users\Nik\Desktop\prog\data2\15"
+path_folder = r"C:\Users\Nik\Desktop\prog\только rmr\15"
 path_folder = path_folder.replace(chr(92), "/") + "/"
 
 size = 1  # кол-во графиков
