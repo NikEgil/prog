@@ -38,16 +38,15 @@ def car(path_folder, s):
         spec = open(str(path_folder + file_list[i]), "r", encoding="utf8")
         spec = spec.read()
         spec = re.split(",", spec)
-        for k in range(20):
-            print(k, spec[k])
+
         for j in range(start_point, end_point):
             y[j - start_point] = float(spec[j + 11])
         # z = exponential_smoothing(y,alpha)
-        z = signal.savgol_filter(y, 51, 3)
+        #  z = signal.savgol_filter(y, 51, 3)
         plt.plot(x, y, label=file_list[i], color="royalblue", linewidth=1)
-        plt.plot(x, z, label="s " + file_list[i], color="darkorange", linewidth=1)
-        mean = np.mean(z[len(z) - 150 : len(z)])
-        plt.plot(x, z - mean, label="d " + file_list[i], color="green", linewidth=1)
+        # plt.plot(x, z, label="s " + file_list[i], color="darkorange", linewidth=1)
+        # mean = np.mean(z[len(z) - 150 : len(z)])
+        # plt.plot(x, z - mean, label="d " + file_list[i], color="green", linewidth=1)
 
     plt.legend(loc=1, title=round(alpha, 4))
     plt.show()
@@ -76,6 +75,10 @@ def on_press(event):
         s = s - size
         if s > n - size:
             s = 0
+    if event.key == "5":
+        s = 100
+        for o in range(100):
+            car(path_folder, o)
     if event.key == "up":
         size += 1
     if event.key == "down":
@@ -88,7 +91,7 @@ def on_press(event):
     if event.key == "2":
         alpha -= 0.002
         print(alpha)
-    car(path_folder, s)
+    # car(path_folder, s)
 
 
 fig.canvas.mpl_connect("key_press_event", on_press)

@@ -54,14 +54,14 @@ def get_txt(spec):
     return y
 
 
+n = 0
+
+
 def ploting(a, b, t):
     ax.cla()
-    global mas
+
     b = signal.savgol_filter(b, 50, 3)
-    mas = np.delete(mas, 0, 0)
-    mas = np.append(mas, [b], axis=0)
-    b = np.sum(mas, axis=0)
-    b = np.divide(b, len(mas) - 1)
+
     ax.plot(
         a,
         b,
@@ -82,7 +82,7 @@ ax = fig.add_subplot(111)
 
 start_time = time.time()
 a = 0
-mas = np.zeros((30, len(x)))
+mas = np.zeros((1, len(x)))
 for folder in range(len(folders_list)):
     current_folder_path = main_folder + "/" + folders_list[folder] + "/"
     current_folder = folders_list[folder]
@@ -104,7 +104,7 @@ for folder in range(len(folders_list)):
             if np.max(z) > crit:
                 ploting(x, z, t)
                 q += 1
-            if q > 50:
+            if q > 100:
                 break
 
     elif file_list[0][-1] == "t":
@@ -117,9 +117,9 @@ for folder in range(len(folders_list)):
             if np.max(z) > crit:
                 ploting(x, z, t)
                 q += 1
-            if q > 50:
+            if q > 100:
                 break
-    if q > 50:
+    if q > 100:
         continue
 
 

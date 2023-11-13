@@ -66,7 +66,7 @@ for folder in range(len(folders_list)):
     print("in " + current_folder + " graphs ", len(file_list))
     mas = np.zeros((1, len(x)))
 
-    if len(file_list) > 0 and file_list[0][-1] == "n":
+    if file_list[0][-1] == "n":
         for file in range(len(file_list)):
             spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
             y = get_rmr(spec.read())
@@ -75,7 +75,8 @@ for folder in range(len(folders_list)):
             if np.max(y) > crit:
                 mas = np.append(mas, [y], axis=0)
 
-    elif len(file_list) > 0 and file_list[0][-1] == "t":
+    elif file_list[0][-1] == "t":
+        continue
         for file in range(len(file_list)):
             spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
             y = get_txt(spec.read())
