@@ -19,15 +19,15 @@ crit = 0.1
 # 153 884    измеряемый диапазон. 0-2136 диапазон данных
 start = 400  # нм
 end = 700  # нм
-step_v = (884 - 153) / 2134
-start_point = round((start - 153) / step_v)
-end_point = start_point + int((end - start) / step_v)
+step = (884 - 153) / 2134
+start_point = round((start - 153) / step)
+end_point = start_point + int((end - start) / step)
 
 len_y = end_point - start_point
 start_mean_point = int(len_y * 0.8)
 end_mean_point = int(len_y * 0.9)
 y = np.zeros(len_y)
-x = np.arange(start + step_v, end, step_v)
+x = np.arange(start + step, end, step)
 
 start_max_point = round(len_y * 0.27)
 print(start_max_point, len_y)
@@ -53,9 +53,6 @@ def create():
 
 
 step = 0.0125
-c1 = round((400 - start) / step_v)
-c2 = round((420 - start) / step_v)
-print(c1, "aaa", c2, len_y)
 
 
 def car(current_folder_path, s, method):
@@ -88,23 +85,8 @@ def car(current_folder_path, s, method):
             li[i] = np.sum(li[i], axis=0)
             li[i] = np.divide(li[i], a)
             li[i] = signal.savgol_filter(li[i], 60, 3)
-            lmax = np.argmax(li[i]) * step_v + start
-            imin = np.mean(li[i][c1:c2])
-            imax = np.max(li[i])
-            label = (
-                str(round((i) * step, 4))
-                + "-"
-                + str(round((i + 1) * step, 4))
-                + "\n"
-                + str(round(a / len(file_list) * 100, 2))
-                + "% "
-                + str(round(lmax, 2))
-                + "нм "
-                + str(round(imax / imin, 2))
-            )
-
-            plt.plot(x, li[i], label=label)
-            # plt.plot(x, li[i], label=current_folder_path)
+            # plt.plot(x, li[i], label=str(i) + " " + str(a))
+            plt.plot(x, li[i], label=current_folder_path)
 
     plt.legend(title=str(method))
     plt.show()
@@ -123,8 +105,6 @@ def on_press(event):
     global s
     global size
     global method
-    plt.cla()
-    plt.clf()
     if event.key == "1":
         plt.cla()
         plt.clf()
