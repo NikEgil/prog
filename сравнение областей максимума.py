@@ -32,7 +32,7 @@ y = np.zeros(len_y)
 x = np.arange(start + step, end, step)
 # endregion
 start_max_point = round(len_y * 0.27)
-print(start_point, start_max_point)
+print(start_max_point, len_y)
 
 
 def get_rmr(spec):
@@ -54,20 +54,25 @@ def get_txt(spec):
 plt.ion()
 fig = plt.figure()
 ax = fig.add_subplot(111)
+
+
 start_time = time.time()
 
-bins = [1, 2, 3, 4, 5]
 # len(folders_list)
 steps = 0.0125
 bins1 = np.arange(0, 0.2, steps)
 bins2 = np.arange(steps / 2, 0.2 - steps / 2, steps)
-for folder in range(len(folders_list)):
+
+num_folders = 2
+# num_folders=len(folders_list)
+for folder in range(12, 13):
     current_folder_path = main_folder + "/" + folders_list[folder] + "/"
     current_folder = folders_list[folder]
     file_list = np.array(os.listdir(current_folder_path))
 
     print("in " + current_folder + " graphs ", len(file_list))
     mas = np.zeros(0)
+
     for file in range(len(file_list)):
         spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
         y = get_rmr(spec.read())
@@ -81,7 +86,54 @@ for folder in range(len(folders_list)):
         max_val = np.max(hist)
 
         scaled = (hist - min_val) / (max_val - min_val)
-    plt.plot(bins2, scaled, label=folders_list[folder])
+    plt.plot(bins2, scaled, label="область 0,27-0,3")
+    plt.legend()
+
+    for file in range(len(file_list)):
+        spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
+        y = get_rmr(spec.read())
+        maxs = np.argmax(y)
+        a = np.mean(y[maxs - 50 : maxs + 50]) - np.mean(
+            y[start_mean_point:end_mean_point]
+        )
+
+        mas = np.append(mas, a)
+        hist, bins = np.histogram(mas, bins1)
+        min_val = np.min(hist)
+        max_val = np.max(hist)
+
+        scaled = (hist - min_val) / (max_val - min_val)
+    plt.plot(bins2, scaled, label="область max")
+    plt.legend()
+
+    for file in range(len(file_list)):
+        spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
+        y = get_rmr(spec.read())
+        maxs = np.argmax(y[0 : round(len_y / 2)])
+        a = np.mean(y[maxs - 50 : maxs + 50]) - np.mean(
+            y[start_mean_point:end_mean_point]
+        )
+
+        mas = np.append(mas, a)
+        hist, bins = np.histogram(mas, bins1)
+        min_val = np.min(hist)
+        max_val = np.max(hist)
+
+        scaled = (hist - min_val) / (max_val - min_val)
+    plt.plot(bins2, scaled, label="область max в первой половине")
+    plt.legend()
+    for file in range(len(file_list)):
+        spec = open(current_folder_path + file_list[file], "r", encoding="utf8")
+        y = get_rmr(spec.read())
+        a = np.max(y) - np.mean(y[start_mean_point:end_mean_point])
+
+        mas = np.append(mas, a)
+        hist, bins = np.histogram(mas, bins1)
+        min_val = np.min(hist)
+        max_val = np.max(hist)
+
+        scaled = (hist - min_val) / (max_val - min_val)
+    plt.plot(bins2, scaled, label="просто max")
     plt.legend()
 
 print("Elapsed time: ", time.time() - start_time)
